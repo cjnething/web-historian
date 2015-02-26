@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var httpRequest = require('http-request');
 var httpHelp = require('../web/http-helpers');
 
 /*
@@ -12,7 +13,7 @@ var httpHelp = require('../web/http-helpers');
 
 exports.paths = {
   'siteAssets' : path.join(__dirname, '../web/public'),
-  'archivedSites' : path.join(__dirname, '../archives/sites'),
+  'archivedSites' : path.join(__dirname, '../web/archives/sites'),
   'list' : path.join(__dirname, '../archives/sites.txt'),
   'public' : path.join(__dirname, '../web/public')
 };
@@ -70,7 +71,31 @@ exports.isURLArchived = function(url, callback){
 };
 
 exports.downloadUrls = function(){
+  fs.readFile('../web/archives/sites.txt', function(err, data){
+    if (err) {
+      console.log('Error:', err);
+      return;
+    }
+    // convert str data to array
+    data = data.toString();
+    var urls = data.split("\n").slice(0,-1);
+    // iterate through urls
+    for (var i = 0; i < urls.length; i++) {
+      var url = urls[i];
+      exports.isURLArchived(url, function(isArchived){
+        if (!isArchived) {
+          // download the file if not archived
+          httpRequest.get(url, exports.paths['archivedSites'] + '/' + url + '.html', function(){});
+        }
+      });
+    }
+    //   check if each url is archived
+    //     if not - download it
+
+  });
   // iterate through sites.txt
-  //   if not in sites.txt
+
+
+  //   if not archived
   //     download into sites/
 };
