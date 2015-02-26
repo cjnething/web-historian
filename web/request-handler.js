@@ -47,9 +47,25 @@ exports.handleRequest = function (req, res) {
         if(!isPresent) {
           archive.addUrlToList(url);
         } else {
-          // return the cached page
+          // check to see if url is archived
+          archive.isURLArchived(url, function(isArchived){
+            if (isArchived) {
+              // serve the page
+            } else {
+              // serve up loading.html
+              httpHelp.serveAssets(res, './public/loading.html', function(data){
+                httpHelp.headers['Content-Type'] = "text/html";
+                res.writeHead(200, httpHelp.headers);
+                res.end(data);
+              })
+            }
+          });
         }
       })
+
+      archive.isURLArchived(url, function(isArchived) {
+         console.log(isArchived);
+      });
 
       // console.log("Is test1 present", archive.isUrlInList(res, "www.test1.com"));
       // if (archive.isUrlInList(res, result)) {
@@ -57,9 +73,9 @@ exports.handleRequest = function (req, res) {
       // } else {
       //   archive.addUrlToList(result);
       // }
-      httpHelp.headers['Content-Type'] = "text/html";
-      res.writeHead(200, httpHelp.headers);
-      res.end(result);
+      // httpHelp.headers['Content-Type'] = "text/html";
+      // res.writeHead(200, httpHelp.headers);
+      // res.end(result);
     })
   }
 
