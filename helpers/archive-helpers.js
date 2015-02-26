@@ -57,8 +57,16 @@ exports.addUrlToList = function(url){
   fs.appendFile('../web/archives/sites.txt', url+"\n");
 };
 
-exports.isURLArchived = function(url){
-  // looks in sites to see if url present
+exports.isURLArchived = function(url, callback){
+  fs.readdir('../web/archives/sites', function(err, files){
+    var isArchived = false;
+    for (var i = 0; i < files.length; i++) {
+      if (files[i] === url+'.html') {
+        isArchived = true;
+      }
+    }
+    callback(isArchived);
+  });
 };
 
 exports.downloadUrls = function(){
