@@ -51,6 +51,11 @@ exports.handleRequest = function (req, res) {
           archive.isURLArchived(url, function(isArchived){
             if (isArchived) {
               // serve the page
+              httpHelp.serveAssets(res, './archives/sites/'+url+'.html', function(data){
+                httpHelp.headers['Content-Type'] = "text/html";
+                res.writeHead(200, httpHelp.headers);
+                res.end(data);
+              })
             } else {
               // serve up loading.html
               httpHelp.serveAssets(res, './public/loading.html', function(data){
