@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var httpHelp = require('../web/http-helpers');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -28,6 +29,8 @@ exports.initialize = function(pathsObj){
 
 exports.readListOfUrls = function(){
   // open sites.txt and convert into array
+  var urls = [];
+  httpHelp.serveAssets(res, asset, callback);
 };
 
 exports.isUrlInList = function(url){

@@ -24,8 +24,9 @@ exports.handleRequest = function (req, res) {
 
     else if (req.url.indexOf('/archives/sites') !== -1) {
       // then user is submitting a GET request for a cached site
+      httpHelp.headers['Content-Type'] = "text/html";
       res.writeHead(200, httpHelp.headers);
-      res.end()
+      res.end(req.url);
     }
 
     else {
@@ -40,6 +41,12 @@ exports.handleRequest = function (req, res) {
       result += chunk;
     });
     req.on("end", function() {
+      result = result.slice(4);
+      if (archive.isUrlInList(result)) {
+        // send back archived site
+      } else {
+        archive.addUrlToList(result);
+      }
       httpHelp.headers['Content-Type'] = "text/html";
       res.writeHead(200, httpHelp.headers);
       res.end(result);
