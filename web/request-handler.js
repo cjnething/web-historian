@@ -44,7 +44,11 @@ exports.handleRequest = function (req, res) {
       url = result.slice(4);
 
       archive.isUrlInList(res, url, function(isPresent){
-        console.log(isPresent);
+        if(!isPresent) {
+          archive.addUrlToList(url);
+        } else {
+          // return the cached page
+        }
       })
 
       // console.log("Is test1 present", archive.isUrlInList(res, "www.test1.com"));

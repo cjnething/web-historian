@@ -33,7 +33,6 @@ exports.readListOfUrls = function(res, callback){
   httpHelp.serveAssets(res, "../web/archives/sites.txt", function(data) {
     data = data.toString();
     var urls = data.split("\n").slice(0,-1);
-    //console.log(urls);
     callback(urls);
   });
 };
@@ -53,6 +52,9 @@ exports.isUrlInList = function(res, url, callback){
 
 exports.addUrlToList = function(url){
   // add user provided url to sites.txt
+  //
+  // research fs write file
+  fs.appendFile('../web/archives/sites.txt', url+"\n");
 };
 
 exports.isURLArchived = function(url){
