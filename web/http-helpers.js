@@ -24,6 +24,14 @@ exports.serveAssets = function(res, asset, callback) {
   });
 };
 
+exports.serveHTML = function(res, url) {
+  exports.serveAssets(res, url, function(data){
+    exports.headers['Content-Type'] = "text/html";
+    res.writeHead(200, exports.headers);
+    res.end(data);
+  });
+}
+
 
 
 // As you progress, keep thinking about what helper functions you can put here!
