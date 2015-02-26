@@ -9,12 +9,7 @@ exports.handleRequest = function (req, res) {
   if (req.method === "GET") {
     if (req.url === "/") {
 
-      fs.readFile('./public/index.html', function(err, data){
-        if (err) {
-          res.writeHead(404);
-          res.end(JSON.stringify(err));
-          return;
-        }
+      httpHelp.serveAssets(res, './public/index.html', function(data){
         res.writeHead(200, httpHelp.headers);
         res.end(data);
       });
