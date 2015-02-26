@@ -27,21 +27,28 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(res){
+exports.readListOfUrls = function(res, callback){
   // open sites.txt and convert into array
 
-  return httpHelp.serveAssets(res, "../web/archives/sites.txt", function(data) {
+  httpHelp.serveAssets(res, "../web/archives/sites.txt", function(data) {
     data = data.toString();
     var urls = data.split("\n").slice(0,-1);
-    console.log(urls);
-    return urls;
+    //console.log(urls);
+    callback(urls);
   });
 };
 
-exports.isUrlInList = function(res, url){
-  // iterate through array in sites.txt
-  //   see if the url is in the list
-  var urls = exports.readListOfUrls(res);
+exports.isUrlInList = function(res, url, callback){
+  // iterate through readListOfUrls and check if url present
+  exports.readListOfUrls(res, function(urls) {
+      var isPresent = false;
+      for (var i = 0; i < urls.length; i++) {
+        if (urls[i] === url) {
+          isPresent = true;
+        }
+      }
+      callback(isPresent);
+  });
 };
 
 exports.addUrlToList = function(url){

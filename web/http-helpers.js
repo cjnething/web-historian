@@ -20,7 +20,7 @@ exports.serveAssets = function(res, asset, callback) {
       res.end(JSON.stringify(err));
       return;
     }
-    return callback(data);
+    callback(data);
   });
 };
 

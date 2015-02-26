@@ -41,12 +41,18 @@ exports.handleRequest = function (req, res) {
       result += chunk;
     });
     req.on("end", function() {
-      result = result.slice(4);
-      if (archive.isUrlInList(result)) {
-        // send back archived site
-      } else {
-        archive.addUrlToList(result);
-      }
+      url = result.slice(4);
+
+      archive.isUrlInList(res, url, function(isPresent){
+        console.log(isPresent);
+      })
+
+      // console.log("Is test1 present", archive.isUrlInList(res, "www.test1.com"));
+      // if (archive.isUrlInList(res, result)) {
+      //   // send back archived site
+      // } else {
+      //   archive.addUrlToList(result);
+      // }
       httpHelp.headers['Content-Type'] = "text/html";
       res.writeHead(200, httpHelp.headers);
       res.end(result);
