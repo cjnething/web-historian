@@ -13,8 +13,8 @@ var httpHelp = require('../web/http-helpers');
 
 exports.paths = {
   'siteAssets' : path.join(__dirname, '../web/public'),
-  'archivedSites' : path.join(__dirname, '../web/archives/sites'),
-  'list' : path.join(__dirname, '../archives/sites.txt'),
+  'archivedSites' : path.join(__dirname, '../web/archives/sites/'),
+  'list' : path.join(__dirname, '../web/archives/sites.txt'),
   'public' : path.join(__dirname, '../web/public')
 };
 
@@ -31,7 +31,7 @@ exports.initialize = function(pathsObj){
 exports.readListOfUrls = function(res, callback){
   // open sites.txt and convert into array
 
-  httpHelp.serveAssets(res, "../web/archives/sites.txt", function(data) {
+  httpHelp.serveAssets(res, exports.paths['list'], function(data) {
     data = data.toString();
     var urls = data.split("\n").slice(0,-1);
     callback(urls);
@@ -55,11 +55,11 @@ exports.addUrlToList = function(url){
   // add user provided url to sites.txt
   //
   // research fs write file
-  fs.appendFile('../web/archives/sites.txt', url+"\n");
+  fs.appendFile(exports.paths['list'], url+"\n");
 };
 
 exports.isURLArchived = function(url, callback){
-  fs.readdir('../web/archives/sites', function(err, files){
+  fs.readdir(exports.paths['archivedSites'], function(err, files){
     var isArchived = false;
     for (var i = 0; i < files.length; i++) {
       if (files[i] === url+'.html') {
@@ -71,7 +71,7 @@ exports.isURLArchived = function(url, callback){
 };
 
 exports.downloadUrls = function(callback){
-  fs.readFile('../web/archives/sites.txt', function(err, data){
+  fs.readFile(exports.paths['list'], function(err, data){
     if (err) {
       console.log('Error:', err);
       return;

@@ -9,7 +9,7 @@ exports.handleRequest = function (req, res) {
 
   if (req.method === "GET") {
     if (req.url === "/") {
-      httpHelp.serveHTML(res, './public/index.html');
+      httpHelp.serveHTML(res, archive.paths['public'] + '/index.html');
     }
     else if (req.url === "/styles.css") {
       httpHelp.serveAssets(res, archive.paths['public'] + '/styles.css', function(data){
@@ -44,13 +44,13 @@ exports.handleRequest = function (req, res) {
         if(!isPresent) {
           archive.addUrlToList(url);
           // fetcher.wrapper();
-          httpHelp.serveHTML(res, './public/loading.html');
+          httpHelp.serveHTML(res, archive.paths['public'] + '/loading.html');
         } else {
           archive.isURLArchived(url, function(isArchived){
             if (isArchived) {
-              httpHelp.serveHTML(res, './archives/sites/' + url +'.html');
+              httpHelp.serveHTML(res, archive.paths['archivedSites'] + url +'.html');
             } else {
-              httpHelp.serveHTML(res, './public/loading.html');
+              httpHelp.serveHTML(res, archive.paths['public'] + '/loading.html');
             }
           });
         }
