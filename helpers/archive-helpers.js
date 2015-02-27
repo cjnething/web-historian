@@ -70,7 +70,7 @@ exports.isURLArchived = function(url, callback){
   });
 };
 
-exports.downloadUrls = function(){
+exports.downloadUrls = function(callback){
   fs.readFile('../web/archives/sites.txt', function(err, data){
     if (err) {
       console.log('Error:', err);
@@ -79,15 +79,12 @@ exports.downloadUrls = function(){
     // convert str data to array
     data = data.toString();
     var urls = data.split("\n").slice(0,-1);
+
     // iterate through urls
     for (var i = 0; i < urls.length; i++) {
       var url = urls[i];
-      exports.isURLArchived(url, function(isArchived){
-        if (!isArchived) {
-          // download the file if not archived
-          httpRequest.get(url, exports.paths['archivedSites'] + '/' + url + '.html', function(){});
-        }
-      });
+      callback(url);
+
     }
     //   check if each url is archived
     //     if not - download it

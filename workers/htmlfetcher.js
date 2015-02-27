@@ -1,2 +1,16 @@
-// eventually, you'll have some code here that uses the code in `archive-helpers.js`
-// to actually download the urls you want to download.
+var archive = require('../helpers/archive-helpers');
+var httpRequest = require('http-request');
+// exports.wrapper = function() {
+  archive.downloadUrls(function(url) {
+    console.log("processing", url);
+    archive.isURLArchived(url, function(isArchived){
+      if (!isArchived) {
+        // download the file if not archived
+        console.log('getting', url);
+        httpRequest.get(url, archive.paths['archivedSites'] + '/' + url + '.html', function(){});
+      }
+    });
+  });
+// };
+
+// go through the list, if not archived, take a snapshot

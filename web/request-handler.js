@@ -3,6 +3,7 @@ var archive = require('../helpers/archive-helpers');
 // require more modules/folders here!
 var httpHelp = require('./http-helpers');
 var fs = require('fs');
+var fetcher = require('../workers/htmlfetcher.js');
 
 exports.handleRequest = function (req, res) {
 
@@ -42,11 +43,12 @@ exports.handleRequest = function (req, res) {
       archive.isUrlInList(res, url, function(isPresent){
         if(!isPresent) {
           archive.addUrlToList(url);
+          // fetcher.wrapper();
           httpHelp.serveHTML(res, './public/loading.html');
         } else {
           archive.isURLArchived(url, function(isArchived){
             if (isArchived) {
-              httpHelp.serveHTML(res, './archives/sites/'+url+'.html');
+              httpHelp.serveHTML(res, './archives/sites/' + url +'.html');
             } else {
               httpHelp.serveHTML(res, './public/loading.html');
             }
